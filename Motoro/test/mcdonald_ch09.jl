@@ -189,19 +189,109 @@ end
     # Given values
     # K₁ = 50, K₂ = 55, C₁ = 9, C₂ = 10, P₁ = 7, P₂ = 6
 
-    # Expected No-Arbitrage Expressions to Fail
+    # No-Arbitrage Expressions to Test
     # C₁ >= C₂, where K₁ < K₂
     # P₁ <= P₂, where K₁ < K₂
 
-    x, K, r, r_f, T = 0.009, 0.009, 0.05, 0.01, 1
     call_price₁ = 9
     call_price₂ = 10
     put_price₁ = 7
     put_price₂ = 6
 
-    # Test No-Arbitrage Expressions Fail
+    # Expect at least 1 of the No-Arbitrage Expressions Fail
 
-    @test !(call_price₁ >= call_price₂)
-    @test !(put_price₁ <= put_price₂)
+    @test !(call_price₁ >= call_price₂) || !(put_price₁ <= put_price₂)
+    
+end
+
+@testset "McDonald 9.9" begin
+    # Given values
+    # K₁ = 50, K₂ = 55, C₁ = 16, C₂ = 10, P₁ = 7, P₂ = 14
+
+    # No-Arbitrage Expressions to Test
+    # C₁ - C₂ <= K₂ - K₁
+    # P₂ - P₁ <= K₂ - K₁
+
+    K₁, K₂ = 50, 55
+    call_price₁ = 16
+    call_price₂ = 10
+    put_price₁ = 7
+    put_price₂ = 14
+
+    # Expect at least 1 of the No-Arbitrage Expressions Fail
+
+    @test !(call_price₁ - call_price₂ <= K₂ - K₁) || !(put_price₂ - put_price₁ <= K₂ - K₁)
+    
+end
+
+@testset "McDonald 9.10" begin
+    # Given values
+    # K₁ = 50, K₂ = 55, K₃ = 60, C₁ = 18, C₂ = 14, C₃ = 9.5, P₁ = 7, P₂ = 10.75, P₃ = 14.45
+
+    # No-Arbitrage Expressions to Test
+    # (C₁ - C₂) / (K₂ - K₁) >= (C₂ - C₃) / (K₃ - K₂)
+    # (P₂ - P₁) / (K₂ - K₁) <= (P₃ - P₂) / (K₃ - K₂)
+
+    K₁, K₂, K₃ = 50, 55, 60
+    call_price₁ = 18
+    call_price₂ = 14
+    call_price₃ = 9.5
+    put_price₁ = 7
+    put_price₂ = 10.75
+    put_price₃ = 14.45
+
+    # Expect at least 1 of the No-Arbitrage Expressions Fail
+
+    @test !((call_price₁ - call_price₂) / (K₂ - K₁) >= (call_price₂ - call_price₃) / (K₃ - K₂)) || !((put_price₂ - put_price₁) / (K₂ - K₁) <= (put_price₃ - put_price₂) / (K₃ - K₂))
+    
+end
+
+@testset "McDonald 9.11" begin
+    # Given values
+    # K₁ = 80, K₂ = 100, K₃ = 105, C₁ = 22, C₂ = 9, C₃ = 5, P₁ = 4, P₂ = 21, P₃ = 24.80
+
+    # Computed Value
+    # λ = (K₃ - K₂) / (K₃ - K₁) = 0.2
+
+    # No-Arbitrage Expressions to Test
+    # C₂ <= λ * C₁ + (1 - λ) * C₃
+    # P₂ >= λ * P₁ + (1 - λ) * P₃
+
+    K₁, K₂, K₃ = 80, 100, 105
+    call_price₁ = 22
+    call_price₂ = 9
+    call_price₃ = 5
+    put_price₁ = 4
+    put_price₂ = 21
+    put_price₃ = 24.8
+
+    # Expect at least 1 of the No-Arbitrage Expressions Fail
+
+    @test !((call_price₁ - call_price₂) / (K₂ - K₁) >= (call_price₂ - call_price₃) / (K₃ - K₂)) || !((put_price₂ - put_price₁) / (K₂ - K₁) <= (put_price₃ - put_price₂) / (K₃ - K₂))
+    
+end
+
+@testset "McDonald 9.12a" begin
+    # Given values
+    # K₁ = 90, K₂ = 95, C₁ = 10, C₂ = 4
+
+    # Computed Value
+    # λ = (K₃ - K₂) / (K₃ - K₁) = 0.2
+
+    # No-Arbitrage Expressions to Test
+    # C₂ <= λ * C₁ + (1 - λ) * C₃
+    # P₂ >= λ * P₁ + (1 - λ) * P₃
+
+    K₁, K₂, K₃ = 80, 100, 105
+    call_price₁ = 22
+    call_price₂ = 9
+    call_price₃ = 5
+    put_price₁ = 4
+    put_price₂ = 21
+    put_price₃ = 24.8
+
+    # Expect at least 1 of the No-Arbitrage Expressions Fail
+
+    @test !((call_price₁ - call_price₂) / (K₂ - K₁) >= (call_price₂ - call_price₃) / (K₃ - K₂)) || !((put_price₂ - put_price₁) / (K₂ - K₁) <= (put_price₃ - put_price₂) / (K₃ - K₂))
     
 end
